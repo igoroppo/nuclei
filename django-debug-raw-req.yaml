@@ -1,0 +1,29 @@
+id: django-debug
+
+info:
+  name: Django Debug Method Enabled
+  author: dhiyaneshDK,hackergautam
+  severity: high
+  tags: django,debug
+
+requests:
+  - raw:
+    - |
+      GET {{Path}}/swagger HTTP/1.1
+      Host: {{Hostname}}
+
+    - |
+      GET {{Path}}/swagger/NON_EXISTING_PATH/ HTTP/1.1
+      Host: {{Hostname}}
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - URLconf defined
+          - Page not found
+          - Django tried these URL patterns, in this order
+        condition: and
+
+      - type: status
+        status:
+          - 404
